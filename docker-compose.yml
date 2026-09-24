@@ -1,20 +1,20 @@
-version: '3.8'
+version: "3"
 
 services:
   vinted-notifications:
-    image: fuyucch1/vinted-notifications:latest
+    container_name: vinted-notifications
+    image: ghcr.io/terrorsource/vinted-notifications:latest
     pull_policy: always
-    ports:
-      - "8000:8000"
-      - "8080:8080"
-    volumes:
-      - VN_data:/app/data
-      - VN_logs:/app/logs
+    init: true
     restart: unless-stopped
-    read_only: true
-    tmpfs:
-      - /tmp
-
-volumes:
-  VN_data:
-  VN_logs:
+    network_mode: bridge
+    environment:
+      - TZ=Europe/Amsterdam
+      - PUID=1000
+      - PGID=1000
+    ports:
+      - 8200:8000        # Web UI (change the host port to taste)
+      # - 8280:8080      # RSS feed (optional; uncomment if you use RSS)
+    volumes:
+      - /share/CACHEDEV1_DATA/Docker/vinted-notifications/data:/app/data
+      - /share/CACHEDEV1_DATA/Docker/vinted-notifications/logs:/app/logs
